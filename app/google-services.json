@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "117165060408",
+    "project_id": "prueba-fbf3d",
+    "storage_bucket": "prueba-fbf3d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117165060408:android:b3557a3389bef4345451cd",
+        "android_client_info": {
+          "package_name": "escalante.rene.cartelera"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCFKOr8BL6AXLcsosr_m8khpsWorZA-OQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

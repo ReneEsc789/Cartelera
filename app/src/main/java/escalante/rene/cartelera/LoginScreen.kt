@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,11 +22,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import escalante.rene.cartelera.ui.theme.CarteleraTheme
 
 @Composable
-fun LoginScreen(onLoginOk: () -> Unit) {
-    var usuario by rememberSaveable { mutableStateOf("") }
+fun LoginScreen(
+    onLoginOk: () -> Unit,
+    onRegistrarse: () -> Unit
+) {
+    var correo by rememberSaveable { mutableStateOf("") }
     var contrasena by rememberSaveable { mutableStateOf("") }
     var hayError by rememberSaveable { mutableStateOf(false) }
 
@@ -44,13 +50,16 @@ fun LoginScreen(onLoginOk: () -> Unit) {
             style = MaterialTheme.typography.headlineLarge
         )
         OutlinedTextField(
-            value = usuario,
+            value = correo,
             onValueChange = {
-                usuario = it
+                correo = it
                 hayError = false
             },
-            label = { Text("Usuario") },
+            label = { Text("Correo electrónico") },
             singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            ),
             isError = hayError,
             modifier = Modifier.fillMaxWidth()
         )
@@ -71,22 +80,32 @@ fun LoginScreen(onLoginOk: () -> Unit) {
         )
         if (hayError) {
             Text(
-                text = "Usuario o contraseña incorrectos",
+                text = "Correo o contraseña incorrectos",
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
         }
         Button(
             onClick = {
-                if (usuario.trim() == "admin" && contrasena == "admin") {
-                    onLoginOk()
-                } else {
+                if (correo.isBlank() || contrasena.isBlank()) {
                     hayError = true
+                } else {
+                    Firebase.auth.signInWithEmailAndPassword(correo.trim(), contrasena)
+                        .addOnCompleteListener { tarea ->
+                            if (tarea.isSuccessful) {
+                                onLoginOk()
+                            } else {
+                                hayError = true
+                            }
+                        }
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Ingresar")
+        }
+        TextButton(onClick = onRegistrarse) {
+            Text("¿No tienes cuenta? Regístrate")
         }
     }
 }
@@ -95,6 +114,6 @@ fun LoginScreen(onLoginOk: () -> Unit) {
 @Composable
 fun LoginScreenPreview() {
     CarteleraTheme {
-        LoginScreen(onLoginOk = { })
+        LoginScreen(onLoginOk = { }, onRegistrarse = { })
     }
 }

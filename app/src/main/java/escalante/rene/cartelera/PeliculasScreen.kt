@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,13 +28,33 @@ import androidx.compose.ui.unit.dp
 import escalante.rene.cartelera.ui.theme.CarteleraTheme
 
 @Composable
-fun PeliculasScreen(onPeliculaClick: (Int) -> Unit) {
+fun PeliculasScreen(
+    correo: String,
+    onPeliculaClick: (Int) -> Unit,
+    onCerrarSesion: () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = "Películas",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(16.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = "Películas",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Text(
+                    text = correo,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            TextButton(onClick = onCerrarSesion) {
+                Text("Cerrar sesión")
+            }
+        }
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -83,6 +104,10 @@ fun PeliculaItem(pelicula: Pelicula, onClick: () -> Unit) {
 @Composable
 fun PeliculasScreenPreview() {
     CarteleraTheme {
-        PeliculasScreen(onPeliculaClick = { })
+        PeliculasScreen(
+            correo = "ana@correo.com",
+            onPeliculaClick = { },
+            onCerrarSesion = { }
+        )
     }
 }
